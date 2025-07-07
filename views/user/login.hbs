@@ -1,0 +1,33 @@
+
+<section>
+    <div class="container" style="display: flex;height:350px; justify-content:center ; align-items: center">
+        <div class="row" >
+            <div >
+                <div  style="display: flex; justify-content:center;"><h3>Login</h3><br></div>
+                {{#if loginErr}}
+                    
+                    <p style="color: rgb(208, 110, 110);"><i class="bi bi-emoji-dizzy"  ></i>  Invalid Username or Password</p>
+                {{/if}}
+                <form action="/login"   method="POST">
+                    <div>
+                        <label for="email" >Email address</label>
+                        <br>
+                        <input type="email" name="email" class="form-control mb-3" placeholder="email" style="width:700px ">
+
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <br>
+                        <input type="password" name="password" class="form-control mb-3" placeholder="password" style="width: 700px;">
+                    </div>
+                    
+                    <div style=" display:flex; justify-content:space-between">
+                    <a href="/signup"  style="text-decoration: none;">Create new Account?</a>
+                    <button type="submit" class="btn btn-success"  >Log In</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>

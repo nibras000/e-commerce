@@ -1,0 +1,97 @@
+<section>
+  <div class="container ">
+    <div class="row mt-4 text-center">
+      <h2>Your Cart</h2>
+    </div>
+
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Item</th>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Action</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {{#each cartItems}}
+        <tr>
+          <td>{{@index}}</td>
+          <td>
+            <img src="{{this.image}}" width="60" height="60" />
+          </td>
+          <td>{{this.name}}</td>
+          <td>Rs.{{this.price}}</td>
+          <td>
+
+            <button class="btn btn-primary update-qty" data-action="decrement" data-id="{{this.productId}}" {{#ifCond
+              this.quantity '<=' 1}}disabled{{/ifCond}}>-</button>
+
+
+
+            <span class="mx-2 quantity" id="qty-{{this.productId}}">{{this.quantity}}</span>
+            <button class="btn btn-primary update-qty" data-action="increment" data-id="{{this.productId}}">+</button>
+          </td>
+
+          <td>
+
+            <button class="btn btn-danger delete-item" data-id="{{this.productId}}">
+              Delete
+            </button>
+          </td>
+        </tr>
+
+        {{/each}}
+      </tbody>
+    </table>
+     
+    <div class="d-flex align-items-end flex-column m-5 ">
+      <p class="w-25 text-center">Total :Rs. {{totalAmount}}</p>
+      <a href="/place-order" class="btn btn-success w-25 font-weight-bold" >Place Order</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+<script>
+  // Quantity update (already exists)
+  document.querySelectorAll('.update-qty').forEach(button => {
+    button.addEventListener('click', async function () {
+      const productId = this.dataset.id;
+      const action = this.dataset.action;
+
+      const res = await fetch(`/cart/${action}/${productId}`, {
+        method: 'POST'
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        location.reload(); // or update DOM
+      }
+    });
+  });
+
+  // 🆕 Delete handler
+  document.querySelectorAll('.delete-item').forEach(button => {
+    button.addEventListener('click', async function () {
+      const productId = this.dataset.id;
+
+      const res = await fetch(`/cart/delete/${productId}`, {
+        method: 'POST'
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        location.reload(); // Remove this row dynamically if you want
+      }
+    });
+  });
+
+</script>

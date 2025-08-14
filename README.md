@@ -1,68 +1,87 @@
-# E-Commerce (Node.js + Express + MongoDB)
+# E‑Commerce (Node/Express)
 
-A simple e-commerce web app built with **Express**, **MongoDB (Mongoose)**, and **Handlebars (hbs)**.  
-It supports sessions (via `express-session` + optional `connect-mongo`), user auth, products, and basic cart/ordering.
+A simple e‑commerce web application built with Node.js and Express.
 
-> Deployed on Render with MongoDB Atlas.
+## Demo
+_Deployed on Render or any Node host. Update this section with your live URL._
 
----
+## Features
+- Node.js + Express server
+- MongoDB (Mongoose)
+- Server-rendered views
 
-## ✨ Features
+## Tech Stack
+- Node.js
+- Express
+- MongoDB (Mongoose)
 
-- Express server with `bin/www` launcher (Express Generator style)
-- Handlebars view engine (layouts/partials)
-- MongoDB via Mongoose, configurable using `MONGODB_URI`
-- Session & auth using `express-session` (+ optional persistent sessions via `connect-mongo`)
-- Basic product model and routes (e.g., `/` / `/products`), user routes (e.g., `/login`, `/signup`) *(adjust to your project)*
-- Production-ready env loading & Render deployment
+## Project Structure
+```
 
----
+```
 
-## 🧱 Tech Stack
+## Getting Started (Local)
 
-- **Runtime:** Node.js (20.x recommended)  
-- **Server:** Express  
-- **Views:** Handlebars (hbs)  
-- **DB:** MongoDB (Atlas recommended)  
-- **Sessions:** express-session (+ connect-mongo in production)
-
----
-
-## 📁 Project Structure
-.
-├─ bin/
-│ └─ www # server launcher (listens on process.env.PORT)
-├─ config/
-│ └─ connection.js # Mongo connection (export function or side-effect)
-├─ models/
-│ ├─ products.js # Product schema/model (check exact filename/case)
-│ └─ user.js # User schema/model (check exact filename/case)
-├─ public/ # static assets (css/js/images)
-├─ routes/
-│ ├─ index.js
-│ └─ user.js
-├─ views/ # .hbs templates (layouts, partials)
-├─ app.js # express app bootstrapping
-├─ package.json
-├─ .env.example
-└─ README.md
-
-
-
-> ⚠️ **Case sensitivity matters** on Linux (Render). If the file is `models/Products.js`, import it as `require('../models/Products')`, not `products`.
-
----
-
-## 🔧 Prerequisites
-
-- Node.js 20+ and npm
-- MongoDB Atlas connection string (recommended)  
-- A long random `SESSION_SECRET`
-
-Generate a strong secret:
-
+1) **Clone & install**
 ```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+git clone <your-fork-url>.git
+cd e-commerce
+npm install
+```
 
+2) **Configure environment**
+Create a `.env` file in the project root:
+- `PORT=3000`
+- `MONGO_URI=your_mongodb_connection_uri`
+- `SESSION_SECRET=your_secret`
 
+3) **Run the app**
+```bash
+# Development
+node ./bin/www
 
+# Production
+node ./bin/www
+```
+
+The server defaults to `http://localhost:3000` (or the `PORT` you set).
+
+## Seeding / Admin Setup
+
+If your app requires an admin user, insert one into MongoDB manually or create a seed script. Example (Mongo shell):
+```js
+db.users.insertOne({
+  name: "Admin",
+  email: "admin@example.com",
+  password: "<hashed-password>",
+  role: "admin"
+})
+```
+> Tip: If using bcrypt, hash the password in a Node REPL:  
+```js
+const bcrypt = require('bcryptjs'); bcrypt.hashSync('yourPassword', 10)
+```
+
+## Available Scripts
+- `start` → `node ./bin/www`
+
+## Environment Variables
+Set the following keys in `.env`:
+- `PORT`, `MONGO_URI`, `SESSION_SECRET`
+
+## API & Routes Overview
+_See routes directory for details._
+
+## Deployment
+
+- Create a **Web Service** on Render/Railway/Vercel (Node build & run).
+- **Build command:** `npm install`
+- **Start command:** `node ./bin/www`
+- Add environment variables in your host dashboard.
+- Configure **MongoDB connection string** securely.
+
+## Screenshots
+_Add screenshots of key pages here (Home, Product, Cart, Admin)._
+
+## License
+This project is licensed under the MIT License — feel free to use and modify.

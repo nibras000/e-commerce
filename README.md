@@ -62,6 +62,11 @@ db.users.insertOne({
 const bcrypt = require('bcryptjs'); bcrypt.hashSync('yourPassword', 10)
 ```
 
+Sample Admin login:
+  email: "email@email"
+  passsword:123
+
+  
 ## Available Scripts
 - `start` → `node ./bin/www`
 

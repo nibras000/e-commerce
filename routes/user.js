@@ -73,15 +73,19 @@ router.post('/add-product', (req, res) => {
 });
 
 router.get('/login', async (req, res,) => {
-  if (req.session.user) {
+  if (req.session.admin){
+    return res.render('../admin/view-products')
+   } 
+  else if (req.session.user) {
     return res.redirect('/')
   }
+  
   else {
     res.set('Cache-Control', 'no-store');
 
 
-    res.render('user/login', { loginErr: req.session.loginErr })
-    req.session.loginErr = false
+    res.render('user/login', { loginErr: req.session.userLoginErr })
+    req.session.useLoginErr = false
   }
 
 
@@ -124,10 +128,12 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ email }).lean();
     if (user && await bcrypt.compare(password, user.password)) {
+      
       req.session.user = user; // or JWT if you're using that
+      req.session.user.loggedIn=true;
       res.redirect('/'); // example
     } else {
-      req.session.loginErr = true
+      req.session.useLoginErr = true
       res.redirect('/login');
     }
   } catch (err) {
@@ -137,7 +143,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.session.destroy()
+  req.session.user=null;
   res.redirect('/')
 })
 

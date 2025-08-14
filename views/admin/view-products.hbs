@@ -4,7 +4,7 @@
             <a href="/admin/add-product" class="btn btn-success me-auto">Add Product</a>
         </div>
         
-        <table class="table">
+        <table class="table" id="productTable"> 
             <thead>
                 <tr>
                     <th>#</th>
@@ -43,3 +43,8 @@
 
     </div>
 </section>
+<script>
+    $(document).ready( function () {
+    $('#productTable').DataTable();
+} );
+</script>

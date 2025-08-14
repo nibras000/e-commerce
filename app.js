@@ -5,19 +5,29 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
  
 var app = express();
-
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const hbs =require('express-handlebars');
 
 const session = require('express-session');
-
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 
 app.use(session({
-  secret: 'your_secret_key',
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
-  cookie:{maxAge:600000}
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 14 * 24 * 60 * 60 // 14 days
+  }),
+  cookie: {
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production' // true on HTTPS
+  }
 }));
-
 
 const connectDB = require('./config/connection');
  
@@ -46,7 +56,8 @@ const hbsHelpers = {
     }
   }
 };
-
+const helmet = require('helmet');
+app.use(helmet());
 
 app.engine('hbs', hbs.engine({
     extname: 'hbs',

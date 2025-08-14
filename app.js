@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
+const MongoStore = require('connect-mongo');
  
 var app = express();
 if (process.env.NODE_ENV !== 'production') {
@@ -11,23 +13,30 @@ if (process.env.NODE_ENV !== 'production') {
 const hbs =require('express-handlebars');
 
 const session = require('express-session');
+// behind a proxy on Render → secure cookies work
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
+const sessionOptions = {
+  secret: process.env.SESSION_SECRET || 'dev_fallback_secret',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI,
-    ttl: 14 * 24 * 60 * 60 // 14 days
-  }),
   cookie: {
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production' // true on HTTPS
+    secure: process.env.NODE_ENV === 'production'
   }
-}));
+};
+
+// Use Mongo-backed sessions in production
+if (process.env.MONGODB_URI) {
+  sessionOptions.store = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 14 * 24 * 60 * 60 // 14 days
+  });
+}
+
+app.use(session(sessionOptions));
 
 const connectDB = require('./config/connection');
  

@@ -29,4 +29,40 @@ It supports sessions (via `express-session` + optional `connect-mongo`), user au
 ---
 
 ## 📁 Project Structure
+.
+├─ bin/
+│ └─ www # server launcher (listens on process.env.PORT)
+├─ config/
+│ └─ connection.js # Mongo connection (export function or side-effect)
+├─ models/
+│ ├─ products.js # Product schema/model (check exact filename/case)
+│ └─ user.js # User schema/model (check exact filename/case)
+├─ public/ # static assets (css/js/images)
+├─ routes/
+│ ├─ index.js
+│ └─ user.js
+├─ views/ # .hbs templates (layouts, partials)
+├─ app.js # express app bootstrapping
+├─ package.json
+├─ .env.example
+└─ README.md
+
+
+
+> ⚠️ **Case sensitivity matters** on Linux (Render). If the file is `models/Products.js`, import it as `require('../models/Products')`, not `products`.
+
+---
+
+## 🔧 Prerequisites
+
+- Node.js 20+ and npm
+- MongoDB Atlas connection string (recommended)  
+- A long random `SESSION_SECRET`
+
+Generate a strong secret:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
+
 
